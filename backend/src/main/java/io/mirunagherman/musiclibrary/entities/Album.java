@@ -26,7 +26,7 @@ public class Album implements Serializable {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 1024)
     private String description;
 
     public Album(){}
