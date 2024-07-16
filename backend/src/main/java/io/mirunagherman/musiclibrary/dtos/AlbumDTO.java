@@ -10,13 +10,15 @@ public class AlbumDTO extends RepresentationModel<AlbumDTO> {
     private UUID id;
     private String title;
     private String description;
+    private UUID artistId;
 
     public AlbumDTO(){}
 
-    public AlbumDTO(UUID id, String title, String description) {
+    public AlbumDTO(UUID id, String title, String description, UUID artistId) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.artistId = artistId;
     }
 
     public UUID getId() {
@@ -43,17 +45,26 @@ public class AlbumDTO extends RepresentationModel<AlbumDTO> {
         this.description = description;
     }
 
+    public UUID getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(UUID artistId) {
+        this.artistId = artistId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AlbumDTO albumDTO = (AlbumDTO) o;
         return Objects.equals(title, albumDTO.getTitle()) &&
-                Objects.equals(description, albumDTO.getDescription());
+                Objects.equals(description, albumDTO.getDescription()) &&
+                Objects.equals(artistId, albumDTO.getArtistId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description);
+        return Objects.hash(title, description, artistId);
     }
 }

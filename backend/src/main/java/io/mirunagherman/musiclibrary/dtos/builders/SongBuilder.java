@@ -7,11 +7,11 @@ public class SongBuilder {
     private SongBuilder(){}
 
     public static SongDTO toSongDTO(Song song) {
-        return new SongDTO(song.getId(), song.getTitle(), song.getLength());
+        return new SongDTO(song.getId(), song.getTitle(), song.getLength(), song.getAlbumId());
     }
 
     public static Song toEntity(SongDTO songDTO) {
-        Song song = new Song(songDTO.getTitle(), songDTO.getLength());
+        Song song = new Song(songDTO.getTitle(), songDTO.getLength(), songDTO.getAlbumId());
         song.setId(songDTO.getId());
         return song;
     }

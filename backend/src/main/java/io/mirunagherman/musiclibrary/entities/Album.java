@@ -1,15 +1,14 @@
 package io.mirunagherman.musiclibrary.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.util.UUID;
+
+import static jakarta.persistence.ConstraintMode.CONSTRAINT;
 
 
 @Entity
@@ -29,11 +28,16 @@ public class Album implements Serializable {
     @Column(name = "description", length = 1024)
     private String description;
 
+    @JoinColumn(name = "artist_id", nullable = false, foreignKey = @ForeignKey(value = CONSTRAINT, foreignKeyDefinition = "FOREIGN KEY (artist_id) REFERENCES artist(id) ON DELETE CASCADE"))
+    @JdbcTypeCode(SqlTypes.BINARY)
+    private UUID artistId;
+
     public Album(){}
 
-    public Album(String title, String description) {
+    public Album(String title, String description, UUID artistId) {
         this.title = title;
         this.description = description;
+        this.artistId = artistId;
     }
 
     public UUID getId() {
@@ -58,5 +62,13 @@ public class Album implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public UUID getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(UUID artistId) {
+        this.artistId = artistId;
     }
 }
