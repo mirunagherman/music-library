@@ -4,6 +4,7 @@ import io.mirunagherman.musiclibrary.dtos.AlbumDTO;
 import io.mirunagherman.musiclibrary.dtos.builders.AlbumBuilder;
 import io.mirunagherman.musiclibrary.entities.Album;
 import io.mirunagherman.musiclibrary.repositories.AlbumRepository;
+import io.mirunagherman.musiclibrary.repositories.SongRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,13 @@ import java.util.stream.Collectors;
 public class AlbumService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlbumService.class);
     private final AlbumRepository albumRepository;
+    private final SongRepository songRepository;
 
     @Autowired
-    public AlbumService(AlbumRepository albumRepository) {this.albumRepository = albumRepository;}
+    public AlbumService(AlbumRepository albumRepository, SongRepository songRepository) {
+        this.albumRepository = albumRepository;
+        this.songRepository = songRepository;
+    }
 
     public List<AlbumDTO> findAllAlbums(){
         List<Album> albumList = albumRepository.findAll();
@@ -43,6 +48,7 @@ public class AlbumService {
     }
 
     public void deleteAlbum(UUID albumId){
+        songRepository.deleteSongByAlbumId(albumId);
         albumRepository.deleteById(albumId);
         LOGGER.debug("Album with id {} was deleted from the db", albumId);
 

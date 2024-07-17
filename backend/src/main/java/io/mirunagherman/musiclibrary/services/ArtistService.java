@@ -2,8 +2,11 @@ package io.mirunagherman.musiclibrary.services;
 
 import io.mirunagherman.musiclibrary.dtos.ArtistDTO;
 import io.mirunagherman.musiclibrary.dtos.builders.ArtistBuilder;
+import io.mirunagherman.musiclibrary.entities.Album;
 import io.mirunagherman.musiclibrary.entities.Artist;
+import io.mirunagherman.musiclibrary.repositories.AlbumRepository;
 import io.mirunagherman.musiclibrary.repositories.ArtistRepository;
+import io.mirunagherman.musiclibrary.repositories.SongRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +20,14 @@ import java.util.stream.Collectors;
 public class ArtistService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArtistService.class);
     private final ArtistRepository artistRepository;
+    private final AlbumRepository albumRepository;
+    private final SongRepository songRepository;
 
     @Autowired
-    public ArtistService(ArtistRepository artistRepository){
+    public ArtistService(ArtistRepository artistRepository, AlbumRepository albumRepository, SongRepository songRepository){
         this.artistRepository = artistRepository;
+        this.albumRepository = albumRepository;
+        this.songRepository = songRepository;
     }
 
     public List<ArtistDTO> findAllArtists(){
@@ -45,6 +52,11 @@ public class ArtistService {
     }
 
     public void deleteArtist(UUID artistId){
+        List<Album> albumList = albumRepository.findAllByArtistId(artistId);
+        for (Album a: albumList) {
+            songRepository.deleteSongByAlbumId(a.getId());
+        }
+        albumRepository.deleteAlbumByArtistId(artistId);
         artistRepository.deleteById(artistId);
         LOGGER.debug("Artist with id {} was deleted from the db", artistId);
     }
