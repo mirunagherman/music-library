@@ -1,0 +1,1 @@
+To run the backend application, open the cmd in the root folder `backend` and run the command `java -jar musiclibrary-0.0.1-SNAPSHOT.jar`
