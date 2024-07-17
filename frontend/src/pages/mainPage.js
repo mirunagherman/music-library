@@ -30,11 +30,45 @@ import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
-import { CircularProgress } from "@mui/material";
+import { Autocomplete, CircularProgress, TextField } from "@mui/material";
+
+import { styled, alpha } from '@mui/material/styles';
 
 import AlbumModal from "../components/AlbumModal";
 import ArtistModal from "../components/ArtistModal";
 import SongModal from "../components/SongModal";
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const StyledInputBase = styled(Autocomplete)(({ theme }) => ({
+  color: 'inherit',
+  width: '100%',
+  '& .MuiAutocomplete-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    [theme.breakpoints.up('sm')]: {
+      width: '20ch',
+            '&:focus': {
+              width: '28ch',
+            }
+    },
+  }
+}));
 
 const MainPage = () => {
   const [artists, setArtists] = useState([]);
@@ -47,6 +81,7 @@ const MainPage = () => {
   const [albumToEdit, setAlbumToEdit] = useState(null);
   const [songToEdit, setSongToEdit] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(null);
 
   const getArtistFromList = (id) => {
     for (var a of artists) {
@@ -82,7 +117,12 @@ const MainPage = () => {
     }
 
     if (rSongs) {
+      
       setSongs(rSongs.data);
+      if (searchTerm !== null) {
+        var filteredSongs = songs.filter((song) => song.title === searchTerm)
+        setSongs(filteredSongs);
+        }
     }
   };
 
@@ -269,10 +309,17 @@ const removeAlbum = async (album) => {
     setIsLoading(false);
   };
 
+  const handleOnSearchChange = (value) => {
+    setSearchTerm(value);
+    console.log(value);
+  } 
+
   useEffect(() => {
     console.log("Render again...");
+    
+    console.log(searchTerm);
     readData();
-  }, []);
+  }, [searchTerm]);
 
   if (artists === null || songs === null || albums === null || isLoading) {
     return (
@@ -290,6 +337,19 @@ const removeAlbum = async (album) => {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Music Library
             </Typography>
+            <Search>
+            <StyledInputBase
+              placeholder="Search song…"
+              options={songs.map((option) => option.title)}
+              renderInput={(params) => <TextField {...params} sx={{width: '45ch'}} placeholder="Search song..."></TextField>}
+              onChange={(_, value) => {handleOnSearchChange(value)}}
+              autoComplete={true}
+              autoSelect={true}
+              autoHighlight={true}
+              >
+                
+              </StyledInputBase>
+          </Search>
             <Button color="inherit" onClick={onArtistModalOpen}>
               Add Artist
             </Button>
@@ -398,7 +458,7 @@ const removeAlbum = async (album) => {
                   </Tooltip>
                 </TableCell>
                 <TableCell>
-                  {getAlbumFromList(row.albumId).title}
+                  <Tooltip title={getAlbumFromList(row.albumId).description}>{getAlbumFromList(row.albumId).title}</Tooltip>
                   <Tooltip title="Edit Album">
                     <IconButton 
                     aria-label="edit album" 
