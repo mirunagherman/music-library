@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-import { MenuItem } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
 
 const style = {
   position: "absolute",
@@ -46,7 +46,7 @@ const AlbumModal = (props) => {
   }, [isOpen]);
 
   const getArtistsOptions = () => {
-    if (artists == null || artists == undefined) {
+    if (artists === null || artists === undefined) {
         return [];
     } 
 
@@ -78,7 +78,7 @@ const AlbumModal = (props) => {
     <Modal open={isOpen} onClose={onClose}>
       <Box sx={style}>
         <Typography variant="h5" component="h5">
-          Add Album
+        {albumInput === undefined ? "Add" : "Update"} Album
         </Typography>
         <form
           onSubmit={handleOnSubmit}
