@@ -12,6 +12,7 @@ import {
   deleteSong,
   deleteAlbum,
 } from "../services/musicLibrary";
+import Logo from "../logo.svg";
 import React, { useEffect, useState } from "react";
 
 import Table from "@mui/material/Table";
@@ -21,54 +22,28 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
-import { Autocomplete, CircularProgress, TextField } from "@mui/material";
-
-import { styled, alpha } from "@mui/material/styles";
+import { CircularProgress, TextField } from "@mui/material";
 
 import AlbumModal from "../components/AlbumModal";
 import ArtistModal from "../components/ArtistModal";
 import SongModal from "../components/SongModal";
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(1),
-    width: "auto",
-  },
-}));
-
-const StyledInputBase = styled(Autocomplete)(({ theme }) => ({
-  color: "inherit",
-  width: "100%",
-  "& .MuiAutocomplete-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    [theme.breakpoints.up("sm")]: {
-      width: "20ch",
-      "&:focus": {
-        width: "28ch",
-      },
-    },
-  },
-}));
+import {
+  StyleTitle,
+  StyledAppBar,
+  StyledAppBarButton,
+  StyledInputBase,
+  StyledTableCell,
+  StyledTableRow,
+  Search,
+} from "../styles/styles";
 
 const MainPage = () => {
   const [artists, setArtists] = useState([]);
@@ -321,10 +296,17 @@ const MainPage = () => {
   return (
     <>
       <Box>
-        <AppBar position="static">
+        <StyledAppBar position="static">
           <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Music Library
+            <Typography
+              variant="h2"
+              component="div"
+              sx={{ flexGrow: 1, fontWeight: 700 }}
+            >
+              <StyleTitle>
+                <img src={Logo} />
+                <span>Music Library</span>
+              </StyleTitle>
             </Typography>
             <Search>
               <StyledInputBase
@@ -345,17 +327,17 @@ const MainPage = () => {
                 autoHighlight={true}
               ></StyledInputBase>
             </Search>
-            <Button color="inherit" onClick={onArtistModalOpen}>
+            <StyledAppBarButton color="inherit" onClick={onArtistModalOpen}>
               Add Artist
-            </Button>
-            <Button color="inherit" onClick={onAlbumModalOpen}>
+            </StyledAppBarButton>
+            <StyledAppBarButton color="inherit" onClick={onAlbumModalOpen}>
               Add Album
-            </Button>
-            <Button color="inherit" onClick={onSongModalOpen}>
+            </StyledAppBarButton>
+            <StyledAppBarButton color="inherit" onClick={onSongModalOpen}>
               Add Song
-            </Button>
+            </StyledAppBarButton>
           </Toolbar>
-        </AppBar>
+        </StyledAppBar>
       </Box>
 
       <ArtistModal
@@ -400,22 +382,21 @@ const MainPage = () => {
         songInput={songToEdit}
         albums={albums}
       />
-
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="table">
           <TableHead>
             <TableRow>
-              <TableCell variant="head">Artist</TableCell>
-              <TableCell variant="head">Album</TableCell>
-              <TableCell variant="head">Song</TableCell>
-              <TableCell variant="head">Duration</TableCell>
-              <TableCell variant="head" align="right"></TableCell>
-              <TableCell variant="head" align="right"></TableCell>
+              <StyledTableCell variant="head">Artist</StyledTableCell>
+              <StyledTableCell variant="head">Album</StyledTableCell>
+              <StyledTableCell variant="head">Song</StyledTableCell>
+              <StyledTableCell variant="head">Duration</StyledTableCell>
+              <StyledTableCell variant="head" align="right"></StyledTableCell>
+              <StyledTableCell variant="head" align="right"></StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {songs.map((row) => (
-              <TableRow key={row.id}>
+              <StyledTableRow key={row.id}>
                 <TableCell>
                   {
                     getArtistFromList(getAlbumFromList(row.albumId).artistId)
@@ -501,7 +482,7 @@ const MainPage = () => {
                     </IconButton>
                   </Tooltip>
                 </TableCell>
-              </TableRow>
+              </StyledTableRow>
             ))}
           </TableBody>
         </Table>
