@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/artist")
+@RequestMapping(value = "/artists")
 public class ArtistController {
     private final ArtistService artistService;
 

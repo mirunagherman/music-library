@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping(value = "/album")
+@RequestMapping(value = "/albums")
 public class AlbumController {
     private final AlbumService albumService;
 
