@@ -19,117 +19,111 @@ const style = {
 };
 
 const newSong = {
-    title: "",
-    length: "",
-    albumId: "",
+  title: "",
+  length: "",
+  albumId: "",
 };
 
 const SongModal = (props) => {
-    const {
-        isOpen,
-        onClose,
-        onCreateSong,
-        onUpdateSong,
-        songInput,
-        albums,
-    } = props
-    const [song, setSong] = useState(newSong);
+  const { isOpen, onClose, onCreateSong, onUpdateSong, songInput, albums } =
+    props;
+  const [song, setSong] = useState(newSong);
 
-    useEffect(() => {
-        if (!isOpen) {
-            setSong(newSong);
-        }
+  useEffect(() => {
+    if (!isOpen) {
+      setSong(newSong);
+    }
 
-        if (songInput) {
-            setSong(songInput)
-        }
-    }, [isOpen]);
+    if (songInput) {
+      setSong(songInput);
+    }
+  }, [isOpen]);
 
-    const getAlbumsOptions = () => {
-        if (albums === null || albums ===undefined) {
-            return []
-        }
+  const getAlbumsOptions = () => {
+    if (albums === null || albums === undefined) {
+      return [];
+    }
 
-        return albums.map((a) => ({
-            value: a.id,
-            label: a.title 
-        }));
-    };
+    return albums.map((a) => ({
+      value: a.id,
+      label: a.title,
+    }));
+  };
 
-    const handleOnSubmit = async (event) => {
-        event.preventDefault();
+  const handleOnSubmit = async (event) => {
+    event.preventDefault();
 
-        if (songInput) {
-            await onUpdateSong(song);
-            return;
-        }
+    if (songInput) {
+      await onUpdateSong(song);
+      return;
+    }
 
-        await onCreateSong(song);
-    };
+    await onCreateSong(song);
+  };
 
-    const handleOnChange = (event) => {
-        setSong((prevSong) => ({
-            ...prevSong,
-            [event.target.name]: event.target.value,
-        }));
-    };
+  const handleOnChange = (event) => {
+    setSong((prevSong) => ({
+      ...prevSong,
+      [event.target.name]: event.target.value,
+    }));
+  };
 
-    return (
-        <Modal open={isOpen} onClose={onClose}>
-        <Box sx={style}>
-            <Typography variant="h5" component="h5">
+  return (
+    <Modal open={isOpen} onClose={onClose}>
+      <Box sx={style}>
+        <Typography variant="h5" component="h5">
+          {songInput === undefined ? "Add" : "Update"} Song
+        </Typography>
+        <form
+          onSubmit={handleOnSubmit}
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            gap: 15,
+          }}
+        >
+          <TextField
+            required
+            name="title"
+            value={song.title}
+            onChange={handleOnChange}
+            label="Song Title"
+            variant="filled"
+          />
+          <TextField
+            required
+            name="length"
+            value={song.length}
+            onChange={handleOnChange}
+            label="Length"
+            variant="filled"
+          />
+          <TextField
+            name="albumId"
+            value={song.albumId}
+            onChange={handleOnChange}
+            select
+            label="Album"
+            helperText="Please select album"
+            variant="filled"
+            focused={song.albumId != null}
+          >
+            {getAlbumsOptions().map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <Button type="submit">
             {songInput === undefined ? "Add" : "Update"} Song
-            </Typography>
-            <form
-            onSubmit={handleOnSubmit}
-            style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                gap: 15,
-            }}
-            >
-            <TextField
-                required
-                name="title"
-                value={song.title}
-                onChange={handleOnChange}
-                label="Song Title"
-                variant="filled"
-            />
-            <TextField
-                required
-                name="length"
-                value={song.length}
-                onChange={handleOnChange}
-                label="Length"
-                variant="filled"
-            />
-            <TextField
-                name="albumId"
-                value={song.albumId}
-                onChange={handleOnChange}
-                select
-                label="Album"
-                helperText="Please select album"
-                variant="filled"
-                focused={song.albumId != null}
-            >
-                {getAlbumsOptions().map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                </MenuItem>
-                ))}
-            </TextField>
-
-            <Button type="submit">
-                {songInput === undefined ? "Add" : "Update"} Song
-            </Button>
-            </form>
-        </Box>
-        </Modal>
-    )
+          </Button>
+        </form>
+      </Box>
+    </Modal>
+  );
 };
 
 export default SongModal;

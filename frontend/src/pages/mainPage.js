@@ -32,42 +32,42 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 
-import { styled, alpha } from '@mui/material/styles';
+import { styled, alpha } from "@mui/material/styles";
 
 import AlbumModal from "../components/AlbumModal";
 import ArtistModal from "../components/ArtistModal";
 import SongModal from "../components/SongModal";
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
+  "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
-    width: 'auto',
+    width: "auto",
   },
 }));
 
 const StyledInputBase = styled(Autocomplete)(({ theme }) => ({
-  color: 'inherit',
-  width: '100%',
-  '& .MuiAutocomplete-input': {
+  color: "inherit",
+  width: "100%",
+  "& .MuiAutocomplete-input": {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    [theme.breakpoints.up('sm')]: {
-      width: '20ch',
-            '&:focus': {
-              width: '28ch',
-            }
+    transition: theme.transitions.create("width"),
+    [theme.breakpoints.up("sm")]: {
+      width: "20ch",
+      "&:focus": {
+        width: "28ch",
+      },
     },
-  }
+  },
 }));
 
 const MainPage = () => {
@@ -106,8 +106,6 @@ const MainPage = () => {
       getSongs(),
     ]);
 
-    //filter
-
     if (rArtists) {
       setArtists(rArtists.data);
     }
@@ -117,12 +115,11 @@ const MainPage = () => {
     }
 
     if (rSongs) {
-      
       setSongs(rSongs.data);
       if (searchTerm !== null) {
-        var filteredSongs = songs.filter((song) => song.title === searchTerm)
+        var filteredSongs = songs.filter((song) => song.title === searchTerm);
         setSongs(filteredSongs);
-        }
+      }
     }
   };
 
@@ -200,23 +197,21 @@ const MainPage = () => {
 
       setIsLoading(false);
       onAlbumModalClose();
+    }
   };
-}
 
-const removeAlbum = async (album) => {
-  setIsLoading(true);
-  const id = await deleteAlbum(album.id);
+  const removeAlbum = async (album) => {
+    setIsLoading(true);
+    const id = await deleteAlbum(album.id);
 
-  if (id) {
-    setAlbums((prevAlbums) =>
-      prevAlbums.filter((a) => album.id !== a.id)
-    );
-    var newSongs = songs.filter((s) => s.albumId !== album.id);
-    setSongs(newSongs);
-  }
+    if (id) {
+      setAlbums((prevAlbums) => prevAlbums.filter((a) => album.id !== a.id));
+      var newSongs = songs.filter((s) => s.albumId !== album.id);
+      setSongs(newSongs);
+    }
 
-  setIsLoading(false);
-}
+    setIsLoading(false);
+  };
 
   const createArtist = async (artist) => {
     setIsLoading(true);
@@ -279,7 +274,7 @@ const removeAlbum = async (album) => {
 
   const editSong = async (song) => {
     setIsLoading(true);
-    const response = await updateSong(song)
+    const response = await updateSong(song);
 
     if (response.data) {
       setSongs((presSongs) =>
@@ -294,16 +289,14 @@ const removeAlbum = async (album) => {
 
     setIsLoading(false);
     onUnselectSongToEdit();
-  }
+  };
 
   const removeSong = async (song) => {
     setIsLoading(true);
     const id = await deleteSong(song.id);
 
     if (id) {
-      setSongs((prevSongs) =>
-        prevSongs.filter((s) => song.id !== s.id)
-      );
+      setSongs((prevSongs) => prevSongs.filter((s) => song.id !== s.id));
     }
 
     setIsLoading(false);
@@ -311,13 +304,9 @@ const removeAlbum = async (album) => {
 
   const handleOnSearchChange = (value) => {
     setSearchTerm(value);
-    console.log(value);
-  } 
+  };
 
   useEffect(() => {
-    console.log("Render again...");
-    
-    console.log(searchTerm);
     readData();
   }, [searchTerm]);
 
@@ -338,18 +327,24 @@ const removeAlbum = async (album) => {
               Music Library
             </Typography>
             <Search>
-            <StyledInputBase
-              placeholder="Search song…"
-              options={songs.map((option) => option.title)}
-              renderInput={(params) => <TextField {...params} sx={{width: '45ch'}} placeholder="Search song..."></TextField>}
-              onChange={(_, value) => {handleOnSearchChange(value)}}
-              autoComplete={true}
-              autoSelect={true}
-              autoHighlight={true}
-              >
-                
-              </StyledInputBase>
-          </Search>
+              <StyledInputBase
+                placeholder="Search song…"
+                options={songs.map((option) => option.title)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    sx={{ width: "45ch" }}
+                    placeholder="Search song..."
+                  ></TextField>
+                )}
+                onChange={(_, value) => {
+                  handleOnSearchChange(value);
+                }}
+                autoComplete={true}
+                autoSelect={true}
+                autoHighlight={true}
+              ></StyledInputBase>
+            </Search>
             <Button color="inherit" onClick={onArtistModalOpen}>
               Add Artist
             </Button>
@@ -398,7 +393,7 @@ const removeAlbum = async (album) => {
         albums={albums}
       />
 
-<SongModal
+      <SongModal
         isOpen={songToEdit !== null}
         onClose={onUnselectSongToEdit}
         onUpdateSong={(song) => editSong(song)}
@@ -458,21 +453,26 @@ const removeAlbum = async (album) => {
                   </Tooltip>
                 </TableCell>
                 <TableCell>
-                  <Tooltip title={getAlbumFromList(row.albumId).description}>{getAlbumFromList(row.albumId).title}</Tooltip>
+                  <Tooltip title={getAlbumFromList(row.albumId).description}>
+                    {getAlbumFromList(row.albumId).title}
+                  </Tooltip>
                   <Tooltip title="Edit Album">
-                    <IconButton 
-                    aria-label="edit album" 
-                    sx={{ fontSize: 12 }}
-                    onClick={() =>
-                      onSelectAlbumToEdit(getAlbumFromList(row.albumId))
-                    }
+                    <IconButton
+                      aria-label="edit album"
+                      sx={{ fontSize: 12 }}
+                      onClick={() =>
+                        onSelectAlbumToEdit(getAlbumFromList(row.albumId))
+                      }
                     >
                       <EditIcon />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Delete Album">
-                    <IconButton aria-label="delete album" sx={{ fontSize: 12 }}
-                    onClick={() => removeAlbum(getAlbumFromList(row.albumId))}>
+                    <IconButton
+                      aria-label="delete album"
+                      sx={{ fontSize: 12 }}
+                      onClick={() => removeAlbum(getAlbumFromList(row.albumId))}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </Tooltip>
@@ -481,20 +481,22 @@ const removeAlbum = async (album) => {
                 <TableCell>{row.length}</TableCell>
                 <TableCell>
                   <Tooltip title="Edit Song">
-                    <IconButton aria-label="edit song" sx={{ fontSize: 12 }}
-                    onClick={() => onSelectSongToEdit(row)}>
+                    <IconButton
+                      aria-label="edit song"
+                      sx={{ fontSize: 12 }}
+                      onClick={() => onSelectSongToEdit(row)}
+                    >
                       <EditIcon />
                     </IconButton>
                   </Tooltip>
                 </TableCell>
                 <TableCell>
                   <Tooltip title="Delete Song">
-                    <IconButton 
-                    aria-label="delete song"
-                    sx={{ fontSize: 12 }}
-                      onClick={() =>
-                        removeSong(row)}
-                      >
+                    <IconButton
+                      aria-label="delete song"
+                      sx={{ fontSize: 12 }}
+                      onClick={() => removeSong(row)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   </Tooltip>

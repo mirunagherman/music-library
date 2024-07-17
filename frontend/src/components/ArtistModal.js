@@ -23,48 +23,43 @@ const newArtist = {
 };
 
 const ArtistModal = (props) => {
-    const {
-        isOpen,
-        onClose,
-        onCreateArtist,
-        onUpdateArtist,
-        artistInput
-    } = props;
-    const [artist, setArtist] = useState(newArtist);
+  const { isOpen, onClose, onCreateArtist, onUpdateArtist, artistInput } =
+    props;
+  const [artist, setArtist] = useState(newArtist);
 
-    useEffect(() => {
-        if (!isOpen) {
-            setArtist(newArtist);
-        }
-
-        if (artistInput) {
-            setArtist(artistInput);
-        }
-    }, [isOpen]);
-
-    const handleOnSubmit = async (event) => {
-        event.preventDefault();
-
-        if (artistInput) {
-            await onUpdateArtist(artist);
-            return
-        }
-
-        await onCreateArtist(artist);
+  useEffect(() => {
+    if (!isOpen) {
+      setArtist(newArtist);
     }
 
-    const handleOnChange = (event) => {
-        setArtist((prevArtist) => ({
-          ...prevArtist,
-          [event.target.name]: event.target.value,
-        }));
-      };
+    if (artistInput) {
+      setArtist(artistInput);
+    }
+  }, [isOpen]);
 
-      return (
-        <Modal open={isOpen} onClose={onClose}>
+  const handleOnSubmit = async (event) => {
+    event.preventDefault();
+
+    if (artistInput) {
+      await onUpdateArtist(artist);
+      return;
+    }
+
+    await onCreateArtist(artist);
+  };
+
+  const handleOnChange = (event) => {
+    setArtist((prevArtist) => ({
+      ...prevArtist,
+      [event.target.name]: event.target.value,
+    }));
+  };
+
+  return (
+    <Modal open={isOpen} onClose={onClose}>
       <Box sx={style}>
         <Typography variant="h5" component="h5">
-        {artistInput === undefined ? "Add" : "Update"} Artist
+          {artistInput === undefined ? "Add" : "Update"} Artist
         </Typography>
         <form
           onSubmit={handleOnSubmit}
@@ -91,7 +86,7 @@ const ArtistModal = (props) => {
         </form>
       </Box>
     </Modal>
-      );
+  );
 };
 
 export default ArtistModal;

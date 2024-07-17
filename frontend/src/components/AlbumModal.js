@@ -25,14 +25,8 @@ const newAlbum = {
 };
 
 const AlbumModal = (props) => {
-  const {
-    isOpen,
-    onClose,
-    onCreateAlbum,
-    onUpdateAlbum,
-    albumInput,
-    artists,
-  } = props;
+  const { isOpen, onClose, onCreateAlbum, onUpdateAlbum, albumInput, artists } =
+    props;
   const [album, setAlbum] = useState(newAlbum);
 
   useEffect(() => {
@@ -47,12 +41,12 @@ const AlbumModal = (props) => {
 
   const getArtistsOptions = () => {
     if (artists === null || artists === undefined) {
-        return [];
-    } 
+      return [];
+    }
 
     return artists.map((a) => ({
-        value: a.id,
-        label: a.name
+      value: a.id,
+      label: a.name,
     }));
   };
 
@@ -78,7 +72,7 @@ const AlbumModal = (props) => {
     <Modal open={isOpen} onClose={onClose}>
       <Box sx={style}>
         <Typography variant="h5" component="h5">
-        {albumInput === undefined ? "Add" : "Update"} Album
+          {albumInput === undefined ? "Add" : "Update"} Album
         </Typography>
         <form
           onSubmit={handleOnSubmit}
